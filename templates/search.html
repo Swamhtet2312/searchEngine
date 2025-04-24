@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1, h2 {
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Header */
+        header {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        header .logo h1 {
+            font-size: 2rem;
+            color: #4285F4;
+            margin: 0;
+        }
+
+        header .search-bar {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .search-box {
+            padding: 10px;
+            width: 60%;
+            max-width: 600px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: #4285F4;
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: #3367d6;
+        }
+
+        /* Results Container */
+        .results {
+            margin-top: 20px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10px;
+        }
+
+        /* Result Items */
+        .result {
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a0dab;
+            text-decoration: none;
+        }
+
+        .result-title:hover {
+            text-decoration: underline;
+        }
+
+        .result-url {
+            color: #006621;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .result-description {
+            color: #4d5156;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        /* Login/Signup Option */
+        .login-signup {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .login-signup a {
+            font-size: 1rem;
+            color: #4285F4;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-results-container">
+        <header>
+            <div class="logo">
+                <a href="/"><h1>Tobey Search Engine</h1></a>
+            </div>
+            <div class="search-bar">
+                <form action="/submit" method="GET">
+                    <input type="text" name="query" value="{{ query }}" class="search-box">
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
+            </div>
+        </header>
+
+
+        <div class="results">
+            {% if results and results|length > 0 %}
+                <h2>Search Results for: "{{ query }}"</h2>
+                {% for result in results %}
+                    <div class="result">
+                        <a href="{{ result.link }}" class="result-title">{{ result.title }}</a>
+                        <p class="result-url">{{ result.displayed_link }}</p>
+                        <p class="result-description">{{ result.snippet }}</p>
+                    </div>
+                {% endfor %}
+                
+                <h2>Image Results:</h2>
+                {% for image in imageResults %}
+                    <div class="search_results">
+                        <img src="{{ image.original }}" alt="{{ image.title }}" width="{{ image.original_width }}" height="{{ image.original_height }}">
+                        <p>{{ image.source }}</p>
+                        <p>{{ image.title }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% if query %}
+                    <h2>No results found for: "{{ query }}"</h2>
+                {% else %}
+                    <h2>Start your search above!</h2>
+                {% endif %}
+            {% endif %}
+
+            <div class="login-signup">
+                {% if account %}
+                    <p>Welcome, {{ userName }}! | <a href="/logout">Logout</a></p>
+                {% else %}
+                    <p><a href="/login">Login</a> | <a href="/signup">Signup</a></p>
+                {% endif %}
+            </div>
+
+    </div>
+</body>
+</html>
